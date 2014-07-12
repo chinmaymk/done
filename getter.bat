@@ -1,0 +1,9 @@
+go get github.com/go-martini/martini
+go get github.com/martini-contrib/gzip
+go get github.com/martini-contrib/render
+go get github.com/martini-contrib/oauth2
+go get github.com/martini-contrib/binding
+go get github.com/martini-contrib/sessions
+go get github.com/coopernurse/gorp
+go get github.com/russross/blackfriday
+go get github.com/codegangsta/gin
