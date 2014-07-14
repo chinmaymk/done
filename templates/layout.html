@@ -1,0 +1,22 @@
+{{if eq .Ren.IsPjax false}}
+{{ template "partials/yoda" . }}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {{template "partials/head" . }}
+  </head>
+  <body>
+    <content id="done-container">
+    {{end}}
+    {{template "partials/nav" .}}
+    
+    <div class="container">
+      <!-- Render the current template here -->
+      {{ yield }}
+    </div>
+    {{if eq .Ren.IsPjax false}}
+    </content>
+    {{template "partials/script" .}}
+  </body>
+</html>
+{{end}}

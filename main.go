@@ -1,63 +1,85 @@
 package main
 
 import (
+	"done/conf"
+	"done/routes"
+	"done/services"
+	"fmt"
 	"github.com/go-martini/martini"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/jinzhu/gorm"
+	"github.com/martini-contrib/gzip"
 	"github.com/martini-contrib/oauth2"
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
-	"github.com/russross/blackfriday"
-	"html/template"
-	"io/ioutil"
-	"net/http"
+	"log"
+	"os"
 )
 
 func main() {
-	m := martini.Classic()
+	r := martini.NewRouter()
+	m := martini.New()
+	m.MapTo(r, (*martini.Routes)(nil))
+	m.Action(r.Handle)
 
+	setupDataBase(m)
+
+	setupMiddleWare(m)
+
+	routes.SetupRoutes(r)
+
+	m.Run()
+}
+
+// setups all middleware in right order
+func setupMiddleWare(m *martini.Martini) {
+
+	m.Use(gzip.All())
+
+	m.Use(martini.Logger())
+	m.Use(martini.Recovery())
+	m.Use(martini.Static("public"))
+
+	//create a cookie store
 	store := sessions.NewCookieStore([]byte("new new cookie"))
+	m.Use(sessions.Sessions("done", store))
 
-	m.Use(sessions.Sessions("agila", store))
-
+	//github login
 	m.Use(oauth2.Github(&oauth2.Options{
 		ClientId:     "1e7b4ec76b1eaa4acd42",
 		ClientSecret: "e4aa485fb28cf99067ad6e015cccd943a21eee3b",
-		RedirectURL:  "http://localhost:3000/oauth2callback",
 		Scopes:       []string{"repo, user"},
 	}))
 
+	//templating engine
 	m.Use(render.Renderer(render.Options{
 		Directory:       "templates",                // Specify what path to load the templates from.
-		Layout:          "",                         // Specify a layout template. Layouts can call {{ yield }} to render the current template.
+		Layout:          "layout",                   // Specify a layout template. Layouts can call {{ yield }} to render the current template.
 		Extensions:      []string{".tmpl", ".html"}, // Specify extensions to load for templates.
 		IndentJSON:      true,                       // Output human readable JSON
 		IndentXML:       true,                       // Output human readable XML
 		HTMLContentType: "text/html",                // Output XHTML content type instead of default "text/html"
 	}))
 
-	m.Get("/", func(r render.Render, tokens oauth2.Tokens) {
-		token := tokens.Access()
-		println("token", token)
-		response, _ := http.Get("https://api.github.com/user?access_token=" + token)
-		defer response.Body.Close()
+	m.Use(services.Pjax())
 
-		contents, _ := ioutil.ReadAll(response.Body)
-		r.JSON(http.StatusOK, string(contents))
-	})
+	m.Use(services.ContextProvider())
+}
 
-	m.Get("/oauth2callback", func(req *http.Request, tokens oauth2.Tokens) string {
-		token := tokens.Access()
-		println("oauth callback", token)
-		return token
-	})
+func setupDataBase(m *martini.Martini) {
+	c := fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True", conf.DBUser, conf.DBPassword, conf.DBName)
 
-	m.Get("/oauth2error", func(req *http.Request) string {
-		return "not right"
-	})
+	db, err := gorm.Open("mysql", c)
+	if err != nil {
+		panic(err)
+	}
+	db.LogMode(true)
 
-	m.Post("/", func(req *http.Request, r render.Render) {
-		text := req.FormValue("text")
-		r.HTML(200, "show", template.HTML(blackfriday.MarkdownCommon([]byte(text))))
-	})
+	db.DB().SetMaxIdleConns(10)
+	db.DB().SetMaxOpenConns(100)
+	db.DB().Ping()
+	db.SetLogger(log.New(os.Stdout, "\r\n", 0))
 
-	m.Run()
+	services.SetupTables(db)
+	m.Map(db)
 }

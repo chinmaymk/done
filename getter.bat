@@ -4,6 +4,7 @@ go get github.com/martini-contrib/render
 go get github.com/martini-contrib/oauth2
 go get github.com/martini-contrib/binding
 go get github.com/martini-contrib/sessions
-go get github.com/coopernurse/gorp
+go get github.com/jinzhu/gorm
+go get github.com/go-sql-driver/mysql
 go get github.com/russross/blackfriday
 go get github.com/codegangsta/gin
