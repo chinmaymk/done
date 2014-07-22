@@ -1,1 +1,27 @@
-<h1>From projects! </h1>
+<div class="row">
+  <div class="col-md-3">
+    <div class="thumbnail dotted-border">
+      <div class="caption">
+        <h3>Create a new project</h3>
+        <p>
+        <a href="/projects/new" class="btn btn-primary" role="button">Create</a>
+        </p>
+      </div>
+    </div>
+    <div class="text-muted text-center">
+      Seems like a good day to start something!
+      Create a new project <a href="/projects/new">here</a>
+    </div>
+  </div>
+  <div class="col-md-9">
+    {{range .Data}}
+    <h1>{{.Name}}</h1>
+    {{else}}
+    <div class="text-muted text-center">
+      <p>No projects for now</p>
+      <p>Why don't you start here</p>
+      <p><-------------------</p>
+    </div>
+    {{end}}
+  </div>
+</div>

@@ -26,15 +26,11 @@ func Pjax() martini.Handler {
 	}
 }
 
-func (d *DoneRenderer) Pjax(template string, data interface{}) {
+func (d *DoneRenderer) HTML(template string, data interface{}) {
 	layout := "layout"
 	d.r.HTML(http.StatusOK, template, data, render.HTMLOptions{
 		Layout: layout,
 	})
-}
-
-func (d *DoneRenderer) PjaxStatic(template string) {
-	d.Pjax(template, "if you see this, look in pjax.go on line 37")
 }
 
 func (d *DoneRenderer) Json(data interface{}) {

@@ -1,17 +1,20 @@
 package controllers
 
 import (
+	. "done/models"
 	"done/services"
 )
 
-func Show(c services.Context) {
-	c.Ren.Pjax("pages/projects", c)
+//Creates a new project and redirects to edit project page
+func CreateProject(c services.Context) string {
+	p := Project{}
+	p.ProjectName = c.Req.FormValue("name")
+	p.ProjectDescription = c.Req.FormValue("description")
+	return "something"
 }
 
-func ShowOne(c services.Context) {
-	c.Ren.Pjax("pages/projects", c)
-}
-
-func ViewResolver(c services.Context) {
-	c.Ren.Pjax("pages/projects", c)
+//helper function to provide markdown of input text with respect to current project
+func Markdown(c services.Context) []byte {
+	input := c.Req.FormValue("body")
+	return services.Markdown(input)
 }

@@ -10,17 +10,19 @@ import (
 	"net/http"
 )
 
+// flow goes like this
+// If he's not authenticated, send him to login page
+// if he's authenticated and not loaded in session then get user details from github
+// and the end redirect him to /projects
 func Index(tokens oauth2.Tokens, c services.Context, db gorm.DB) {
 	if tokens.IsExpired() {
-		c.Ren.Pjax("pages/landing", c)
+		c.Ren.HTML("pages/landing", c)
 		return
 	}
 
 	token := tokens.Access()
 
-	if c.Ses.Get("email") == nil {
-
-		println("getting user from github")
+	if c.Ses.Get("user") == nil {
 
 		response, _ := http.Get("https://api.github.com/user?access_token=" + token)
 		defer response.Body.Close()
@@ -35,16 +37,18 @@ func Index(tokens oauth2.Tokens, c services.Context, db gorm.DB) {
 		var user User
 		db.FirstOrCreate(&user, u)
 
-		c.Ses.Set("email", user.Email)
+		c.Ses.Set("user", user)
 	}
 
 	http.Redirect(c.Res, c.Req, "/projects", http.StatusTemporaryRedirect)
 }
 
+//called in case oauth blows up
 func LoginError(req *http.Request) string {
 	return "not right"
 }
 
+//this is necessary to clear up in memory session values
 func Logout(c services.Context) {
 	c.Ses.Clear()
 	http.Redirect(c.Res, c.Req, "/logout", http.StatusTemporaryRedirect)

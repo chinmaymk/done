@@ -4,7 +4,6 @@ import (
 	. "done/models"
 	"github.com/go-martini/martini"
 	"github.com/jinzhu/gorm"
-	"github.com/martini-contrib/oauth2"
 	"github.com/martini-contrib/sessions"
 	"net/http"
 )
@@ -14,9 +13,9 @@ type Context struct {
 	Res       http.ResponseWriter
 	Ren       DoneRenderer
 	Ses       sessions.Session
-	Tokens    oauth2.Tokens
 	User      User
 	ProjectId int64
+	DB        gorm.DB
 	Data      interface{}
 }
 
@@ -26,16 +25,30 @@ func ContextProvider() martini.Handler {
 		res http.ResponseWriter,
 		ren DoneRenderer,
 		ses sessions.Session,
-		tokens oauth2.Tokens,
 		db gorm.DB,
 		c martini.Context) {
 
-		email := ses.Get("email")
-		user := User{}
-		if email != nil {
-			db.Where("email = ?", email.(string)).First(&user)
+		var user User
+		u := ses.Get("user")
+		if u != nil {
+			user = u.(User)
 		}
 
-		c.Map(Context{r, res, ren, ses, tokens, user, 0, nil})
+		context := Context{
+			Req:       r,
+			Res:       res,
+			Ren:       ren,
+			Ses:       ses,
+			User:      user,
+			ProjectId: 0,
+			DB:        db,
+			Data:      nil,
+		}
+
+		c.Map(context)
 	}
+}
+
+func (c *Context) LoadData() {
+
 }

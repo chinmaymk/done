@@ -12,8 +12,6 @@ import (
 	"github.com/martini-contrib/oauth2"
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
-	"log"
-	"os"
 )
 
 func main() {
@@ -46,8 +44,8 @@ func setupMiddleWare(m *martini.Martini) {
 
 	//github login
 	m.Use(oauth2.Github(&oauth2.Options{
-		ClientId:     "1e7b4ec76b1eaa4acd42",
-		ClientSecret: "e4aa485fb28cf99067ad6e015cccd943a21eee3b",
+		ClientId:     conf.GithubClientId,
+		ClientSecret: conf.GithubClientSecret,
 		Scopes:       []string{"repo, user"},
 	}))
 
@@ -67,6 +65,7 @@ func setupMiddleWare(m *martini.Martini) {
 }
 
 func setupDataBase(m *martini.Martini) {
+
 	c := fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True", conf.DBUser, conf.DBPassword, conf.DBName)
 
 	db, err := gorm.Open("mysql", c)
@@ -78,7 +77,6 @@ func setupDataBase(m *martini.Martini) {
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(100)
 	db.DB().Ping()
-	db.SetLogger(log.New(os.Stdout, "\r\n", 0))
 
 	services.SetupTables(db)
 	m.Map(db)
