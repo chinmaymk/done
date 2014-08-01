@@ -8,7 +8,7 @@ import (
 
 func IsAuthenticated() martini.Handler {
 	return func(c services.Context) {
-		if c.User.UserId == 0 {
+		if c.User.Id == 0 {
 			http.Redirect(c.Res, c.Req, "/login", http.StatusTemporaryRedirect)
 		}
 	}

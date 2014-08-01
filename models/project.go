@@ -5,9 +5,11 @@ import (
 )
 
 type Project struct {
-	ProjectId          int64
-	ProjectName        string
-	ProjectDescription string
-	UserId             int64
-	CreatedAt          time.Time
+	Id          int
+	Name        string
+	Description string
+	CreatedAt   time.Time
+	CreatorId   int
+	Creator     User
+	Users       []User `gorm:"many2many:user_projects;"`
 }

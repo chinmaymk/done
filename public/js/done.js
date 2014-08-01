@@ -47,9 +47,6 @@
   };
 
   done.fn.createViews = function(key) {
-    if (!$(done.container).exists(key)) {
-      return;
-    }
 
     var $views = $(done.container).find(key);
     $.each($views, create);
@@ -71,9 +68,7 @@
     $(document).pjax('a', done.container, {
       timeout: 2000
     });
-    $(document).on('pjax:complete', function() {
-      done.fn.viewLoaded();
-    });
+    $(document).on('pjax:complete', done.fn.viewLoaded);
     //call for the first time
     done.fn.viewLoaded();
   };

@@ -12,5 +12,4 @@ func SetupTables(db gorm.DB) {
 
 	db.AutoMigrate(User{})
 	db.AutoMigrate(Project{})
-	db.AutoMigrate(ProjectUser{})
 }

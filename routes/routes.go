@@ -15,8 +15,11 @@ func SetupRoutes(m martini.Router) {
 	m.Get("/:page/new", middleware.IsAuthenticated(), controllers.NewPageResolver)
 
 	//showed once user logs in
-	pConf := controllers.ViewConfig{"pages/projects", &views.ProjectView{}}
-	m.Get("/projects", middleware.IsAuthenticated(), controllers.ViewLoader(pConf))
+	showProjectsConf := controllers.ViewConfig{"pages/projects", &views.ProjectView{}}
+	m.Get("/projects", middleware.IsAuthenticated(), controllers.ViewLoader(showProjectsConf))
+
+	editProjectsConf := controllers.ViewConfig{"pages/editproject", &views.EditProjectView{}}
+	m.Get("/projects/:project_id/edit/:tab", middleware.IsAuthenticated(), controllers.ViewLoader(editProjectsConf))
 
 	m.Post("/projects", middleware.IsAuthenticated(), controllers.CreateProject)
 
@@ -24,6 +27,6 @@ func SetupRoutes(m martini.Router) {
 	m.Post("/markdown", middleware.IsAuthenticated(), controllers.Markdown)
 
 	m.NotFound(func(c services.Context) {
-		c.Ren.HTML("pages/404", c)
+		c.Ren.HTML("404", c)
 	})
 }

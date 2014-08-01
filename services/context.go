@@ -20,7 +20,7 @@ type Context struct {
 }
 
 //This guy provides one struct for handling everything, prevents long function definitions
-func ContextProvider() martini.Handler {
+func Contexter() martini.Handler {
 	return func(r *http.Request,
 		res http.ResponseWriter,
 		ren DoneRenderer,
@@ -47,8 +47,4 @@ func ContextProvider() martini.Handler {
 
 		c.Map(context)
 	}
-}
-
-func (c *Context) LoadData() {
-
 }

@@ -12,11 +12,14 @@ import (
 	"github.com/martini-contrib/oauth2"
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
+	"html/template"
 )
 
-func main() {
+var m *martini.Martini
+
+func init() {
 	r := martini.NewRouter()
-	m := martini.New()
+	m = martini.New()
 	m.MapTo(r, (*martini.Routes)(nil))
 	m.Action(r.Handle)
 
@@ -25,7 +28,9 @@ func main() {
 	setupMiddleWare(m)
 
 	routes.SetupRoutes(r)
+}
 
+func main() {
 	m.Run()
 }
 
@@ -49,6 +54,9 @@ func setupMiddleWare(m *martini.Martini) {
 		Scopes:       []string{"repo, user"},
 	}))
 
+	funcmap := template.FuncMap{
+		"markdown": services.MarkdownToHtml,
+	}
 	//templating engine
 	m.Use(render.Renderer(render.Options{
 		Directory:       "templates",                // Specify what path to load the templates from.
@@ -57,11 +65,12 @@ func setupMiddleWare(m *martini.Martini) {
 		IndentJSON:      true,                       // Output human readable JSON
 		IndentXML:       true,                       // Output human readable XML
 		HTMLContentType: "text/html",                // Output XHTML content type instead of default "text/html"
+		Funcs:           []template.FuncMap{funcmap},
 	}))
 
 	m.Use(services.Pjax())
 
-	m.Use(services.ContextProvider())
+	m.Use(services.Contexter())
 }
 
 func setupDataBase(m *martini.Martini) {
