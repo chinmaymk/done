@@ -64,10 +64,10 @@
    * @return {[type]} [description]
    */
   done.fn.init = function() {
-    // $(document).pjax('a[data-no-pjax!="true"]', done.container, {
-    //   timeout: 2000
-    // });
-    // $(document).on('pjax:complete', done.fn.viewLoaded);
+    $(document).pjax('a[data-no-pjax!="true"]', done.container, {
+      timeout: 2000
+    });
+    $(document).on('pjax:complete', done.fn.viewLoaded);
     //call for the first time
     done.fn.viewLoaded();
   };
