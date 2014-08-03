@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var mongoose = require('mongoose');
 
+var locals = rr('/middleware/locals');
 var passport = rr('/middleware/passport');
 
 module.exports = {
@@ -45,6 +46,8 @@ module.exports = {
     //auth auth auth
     app.use(passport.initialize());
     app.use(passport.session());
+
+    app.use(locals());
 
     app.disable('x-powered-by');
   },

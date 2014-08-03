@@ -1,0 +1,21 @@
+nav.navbar.navbar-default(role='navigation')
+  .container
+    //Brand and toggle get grouped for better mobile display
+    .navbar-header
+      button.navbar-toggle(type='button', data-toggle='collapse', data-target='#dn-navbar')
+        span.sr-only Toggle navigation
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a.navbar-brand(href='/') done.
+    #dn-navbar.collapse.navbar-collapse
+      if user
+        ul.nav.navbar-nav.navbar-right
+          li.dropdown
+            a.dropdown-toggle(href='#', data-toggle='dropdown')
+              img(height='20', width='20', src='#{user.avatar}', alt='')
+              | #{user.displayName}
+              span.caret
+            ul.dropdown-menu(role='menu')
+              li
+                a(href='/logout') Logout
