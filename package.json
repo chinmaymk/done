@@ -13,6 +13,11 @@
     "passport-github": "*",
     "express-session": "^1.7.2",
     "mongoose": "^3.8.14",
-    "bluebird": "^2.2.2"
+    "bluebird": "^2.2.2",
+    "underscore": "^1.6.0",
+    "jquery": "^2.1.1"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.7"
   }
 }

@@ -3,6 +3,7 @@ var GitHubStrategy = require('passport-github').Strategy;
 
 var User = rr('./models/user');
 
+//TODO find env variables
 passport.use(new GitHubStrategy({
     clientID: "1e7b4ec76b1eaa4acd42",
     clientSecret: "e4aa485fb28cf99067ad6e015cccd943a21eee3b",
