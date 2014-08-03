@@ -6,8 +6,7 @@ import (
 	"github.com/go-martini/martini"
 )
 
-type ProjectView struct {
-}
+type ProjectView struct{}
 
 func (p *ProjectView) Load(c services.Context, _ martini.Params) interface{} {
 	var projects []Project
