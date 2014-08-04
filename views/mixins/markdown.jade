@@ -1,0 +1,14 @@
+
+mixin mdEditor(rows)
+  div.markdown-editor.thumbnail
+    // Nav tabs
+    ul.nav.nav-tabs(role='tablist')
+      li.active
+        a(href='#write', role='tab', data-toggle='tab') Write
+      li
+        a(href='#preview', role='tab', data-toggle='tab') Preview
+    // Tab panes
+    div.tab-content
+      div#write.tab-pane.active
+        textarea.form-control(rows='#{rows}', name='description')
+      div#preview.tab-pane A minute, loading preview...

@@ -2,6 +2,7 @@
  * Responsible for user management
  * @type {Object}
  */
+
 module.exports = {
   /**
    * Called when github calls us back.
@@ -10,7 +11,9 @@ module.exports = {
    * @return {[type]}     [description]
    */
   oauthcallback: function(req, res) {
-    res.redirect('/');
+    var redirectTo = req.session.redirectTo || '/';
+    res.redirect(redirectTo);
+    delete req.session.redirectTo;
   },
 
   /**

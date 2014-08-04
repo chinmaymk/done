@@ -64,7 +64,7 @@
    * @return {[type]} [description]
    */
   done.fn.init = function() {
-    $(document).pjax('a:not([data-no-pjax])', done.container, {
+    $(document).pjax('a', done.container, {
       timeout: 2000
     });
     $(document).on('pjax:complete', done.fn.viewLoaded);

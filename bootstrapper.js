@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 var mongoose = require('mongoose');
 
 var locals = rr('/middleware/locals');
@@ -39,7 +40,10 @@ module.exports = {
     app.use(session({
       secret: 'keyboard cat',
       saveUninitialized: true,
-      resave: true
+      resave: true,
+      store: new MongoStore({
+        url: process.env.MONGODB,
+      })
     }));
     app.use(express.static(path.join(__dirname, 'public')));
 
@@ -53,7 +57,7 @@ module.exports = {
   },
 
   database: function() {
-    mongoose.connect('mongodb://localhost/done');
+    mongoose.connect(process.env.MONGODB);
     var db = mongoose.connection;
     db.once('open', function() {
       console.info('connected to database');

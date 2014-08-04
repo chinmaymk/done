@@ -7,6 +7,7 @@ global.rr = function(p) {
   return require(path.join(__dirname, p));
 };
 
+rr('./services/config')();
 
 /**
  * You know, the usual. Don't change the order
@@ -35,7 +36,8 @@ var server = app.listen(app.get('port'), function() {
     "  __| | ___  _ __   ___ ",
     " / _` |/ _ \\| '_ \\ / _ \\",
     "| (_| | (_) | | | |  __/",
-    " \\__,_|\\___/|_| |_|\\___|"
+    " \\__,_|\\___/|_| |_|\\___|",
+    ""
   ].join('\n');
 
   console.log(str);

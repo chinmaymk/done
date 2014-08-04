@@ -1,0 +1,22 @@
+extends ../layout
+
+block content
+  .row
+    .col-md-3.hidden-xs
+      ul.nav.nav-pills.nav-stacked
+        li.active
+          a(href='') Details
+        li.disabled
+          a(href='') Workflows
+        li.disabled
+          a(href='') Members
+    .col-md-9
+      form(role='form', method='POST', action='/projects')
+        .form-group
+          label(for='project-name') Project name
+          input.form-control(type='text', name='name', placeholder='')
+        .form-group
+          label(for='project-description') Description
+          +mdEditor(10)
+        button.btn.btn-primary(type='submit') Create
+        a.btn(href="/") Cancel

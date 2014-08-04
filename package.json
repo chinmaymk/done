@@ -15,9 +15,15 @@
     "mongoose": "^3.8.14",
     "bluebird": "^2.2.2",
     "underscore": "^1.6.0",
-    "jquery": "^2.1.1"
+    "jquery": "^2.1.1",
+    "github": "^0.2.1",
+    "marked": "^0.3.2",
+    "highlight.js": "^8.1.0",
+    "connect-mongo": "^0.4.1"
   },
   "devDependencies": {
-    "gulp": "^3.8.7"
+    "gulp": "^3.8.7",
+    "gulp-nodemon": "^1.0.4",
+    "gulp-livereload": "^2.1.0"
   }
 }

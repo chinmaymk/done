@@ -2,6 +2,7 @@ var passport = require('passport');
 var GitHubStrategy = require('passport-github').Strategy;
 
 var User = rr('./models/user');
+var github = rr('./services/github');
 
 //TODO find env variables
 passport.use(new GitHubStrategy({
@@ -11,12 +12,27 @@ passport.use(new GitHubStrategy({
     scope: ['user', 'repo']
   },
   function(accessToken, refreshToken, profile, done) {
-    var user = new User({
-      name: profile.displayName
+    github.authenticate({
+      type: "oauth",
+      token: accessToken
     });
-    user.saveAsync().then(function() {
-      done(null, profile);
-    });
+    User.findOneAsync({
+      login: profile._json.login
+    }).then(function(user) {
+      if (user) {
+        return done(null, user);
+      }
+      var u = new User({
+        name: profile.displayName,
+        login: profile._json.login,
+        email: profile._json.email,
+        gravatar: profile._json.avatar_url
+      });
+
+      return u.saveAsync().then(function() {
+        done(null, u);
+      });
+    }).catch(done);
   }
 ));
 
@@ -34,5 +50,13 @@ passport.deserializeUser(function(user, done) {
   //object and pass to done() 
   done(null, user);
 });
+
+passport.isAuthenticated = function(req, res, next) {
+  if (!req.user) {
+    req.session.redirectTo = req.url;
+    res.redirect('/?redirectTo=' + req.url);
+  }
+  next();
+};
 
 module.exports = passport;
