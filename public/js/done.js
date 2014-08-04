@@ -1,4 +1,5 @@
 /*jshint sub:true*/
+/* global $,_,Backbone,jQuery */
 /**
  * Just a global helper object
  * @type {Object}
@@ -93,15 +94,10 @@
         data: {
           body: value
         },
-        success: update
+        success: function(data) {
+          $preview.html(data);
+        }
       });
-
-      function update(data) {
-        $preview.html(data);
-        $preview.find('pre code').each(function(i, block) {
-          hljs.highlightBlock(block);
-        });
-      }
     }
   });
 

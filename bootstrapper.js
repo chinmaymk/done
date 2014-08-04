@@ -22,7 +22,8 @@ module.exports = {
     app.set('views', path.join(__dirname, 'views'));
     app.set('view engine', 'jade');
     app.locals = {
-      appName: 'done'
+      appName: 'done',
+      NODE_ENV: process.env.NODE_ENV
     };
   },
 
