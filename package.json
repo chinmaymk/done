@@ -14,8 +14,6 @@
     "express-session": "^1.7.2",
     "mongoose": "^3.8.14",
     "bluebird": "^2.2.2",
-    "underscore": "^1.6.0",
-    "jquery": "^2.1.1",
     "github": "^0.2.1",
     "marked": "^0.3.2",
     "highlight.js": "^8.1.0",
