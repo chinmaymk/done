@@ -14,8 +14,13 @@ block content
           a(href='/projects/import') GitHub
     .col-md-9
       each val in projects
-        h1 #{val.name}
-        div!= marked(val.Description || '')
+        .panel.panel-default
+          .panel-body
+            a(href="/#{val.path}/tasks") 
+              h1 #{val.name}
+              a(href="/#{val.path}/edit/details")
+                i.glyphicon.glyphicon-pencil
+            div!= marked(val.description || '')
       if(!projects.length)
         .text-muted.text-center
           p Noop, nothing here.

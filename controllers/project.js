@@ -1,5 +1,5 @@
-var User = rr('./models/user');
 var Project = rr('./models/project');
+var User = rr('./models/user');
 
 /**
  * Does everything required by a project
@@ -14,10 +14,12 @@ module.exports = {
    * @return {[type]}        [description]
    */
   list: function(req, res, next) {
-    User.findById(req.user._id).populate('projects').exec().then(function(user) {
-      res.locals.projects = user.projects;
+    Project.findAsync({
+      members: req.user._id
+    }).then(function(projects) {
+      res.locals.projects = projects;
       res.render('project/list');
-    }, next);
+    }).catch(next);
   },
 
   /**
@@ -46,11 +48,8 @@ module.exports = {
     p.path = [req.user.login, p.name].join('/');
     p.members.push(req.user._id);
 
-    User.findByIdAsync(req.user._id).then(function(user) {
-      user.projects.push(p);
-      return [user.saveAsync(), p.saveAsync()];
-    }).then(function() {
-      res.redirect([req.user.login, p.name, 'tasks'].join('/'));
+    p.saveAsync().then(function() {
+      res.redirect([req.user.login, p.name, 'edit', 'workflows'].join('/'));
     }).catch(next);
   },
 
@@ -60,8 +59,42 @@ module.exports = {
    * @param  {[type]} res [description]
    * @return {[type]}     [description]
    */
-  editDetails: function(req, res) {
+  editDetailsPage: function(req, res) {
+    res.render('project/edit-details');
+  },
 
+  /**
+   * You can edit types and states and their order here.
+   * @param  {[type]} req [description]
+   * @param  {[type]} res [description]
+   * @return {[type]}     [description]
+   */
+  editWorkflowsPage: function(req, res) {
+
+    res.render('project/edit-workflows');
+  },
+
+  /**
+   * Add or remove members, the usual
+   * @param  {[type]} req [description]
+   * @param  {[type]} res [description]
+   * @return {[type]}     [description]
+   */
+  editMembersPage: function(req, res) {
+    res.render('project/edit-members');
+  },
+
+  listForUser: function(req, res, next) {
+    User.findOneAsync({
+      login: req.params.username
+    }).then(function(user) {
+      return Project.findAsync({
+        members: user._id
+      });
+    }).then(function(projects) {
+      res.locals.projects = projects;
+      res.render('project/list');
+    }).catch(next);
   }
 
 };

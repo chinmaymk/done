@@ -18,10 +18,6 @@ var userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  projects: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Project'
-  }]
 });
 
 var user = mongoose.model('User', userSchema);

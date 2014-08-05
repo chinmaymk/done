@@ -1,0 +1,6 @@
+
+mixin editProjectNav(project, index)
+   ul.nav.nav-pills.nav-stacked
+    each val, i in ['Details', 'Workflows', 'Members']
+      li(class = index === i ? 'active' : '')
+        a(href ='/#{project.path}/edit/#{val.toLowerCase()}') #{val}

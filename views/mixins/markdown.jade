@@ -1,5 +1,5 @@
 
-mixin mdEditor(rows)
+mixin mdEditor(rows, text)
   div.markdown-editor.thumbnail
     // Nav tabs
     ul.nav.nav-tabs(role='tablist')
@@ -10,5 +10,5 @@ mixin mdEditor(rows)
     // Tab panes
     div.tab-content
       div#write.tab-pane.active
-        textarea.form-control(rows='#{rows}', name='description')
+        textarea.form-control(rows='#{rows}', name='description') #{text}
       div#preview.tab-pane A minute, loading preview...
