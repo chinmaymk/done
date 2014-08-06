@@ -10,7 +10,6 @@ var mongoose = require('mongoose');
 
 var locals = rr('/middleware/locals');
 var passport = rr('/middleware/passport');
-var redir = rr('./middleware/custom-redirect');
 
 module.exports = {
   /**
@@ -54,7 +53,6 @@ module.exports = {
     app.use(passport.session());
 
     app.use(locals());
-    app.use(redir());
 
     app.disable('x-powered-by');
   },
