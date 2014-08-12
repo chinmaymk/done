@@ -5,7 +5,8 @@ block content
     .col-md-3.hidden-xs
       +editProjectNav(project, 0)
     .col-md-9
-      form(role='form', method='POST', action='/projects')
+      form(role='form', method='POST', action='/#{project.path}/edit/details')
+        input(type='hidden' name='id' value='#{project._id}')
         .form-group
           label(for='project-name') Project name
           input.form-control(type='text', name='name', placeholder='', value='#{project.name}')

@@ -14,7 +14,7 @@ router.get('/', index.index);
 router.get('/login', passport.authenticate('github'));
 router.get('/logout', auth.logout);
 router.get('/oauth/github/callback', passport.authenticate('github', {
-  failureRedirect: '/'
+    failureRedirect: '/'
 }), auth.oauthcallback);
 
 
@@ -28,7 +28,10 @@ router.get('/projects/new', project.newPage);
 router.post('/projects', project.create);
 //edit project routes, load project object before going to controller
 router.use('/:username/:project/edit', loadProject);
+
 router.get('/:username/:project/edit/details', project.editDetailsPage);
+router.post('/:username/:project/edit/details', project.editDetails);
+
 router.get('/:username/:project/edit/workflows', project.editWorkflowsPage);
 router.get('/:username/:project/edit/members', project.editMembersPage);
 

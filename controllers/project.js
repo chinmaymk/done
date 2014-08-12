@@ -1,5 +1,6 @@
 var Project = rr('./models/project');
 var User = rr('./models/user');
+var util = rr('./services/util');
 
 /**
  * Does everything required by a project
@@ -45,11 +46,11 @@ module.exports = {
       p[d] = req.body[d];
     });
 
-    p.path = [req.user.login, p.name].join('/');
+    p.path = util.url(req.user.login, p.name);
     p.members.push(req.user._id);
 
     p.saveAsync().then(function() {
-      res.redirect([req.user.login, p.name, 'edit', 'workflows'].join('/'));
+      res.redirect(util.url(req.user.login, p.name, 'edit', 'workflows'));
     }).catch(next);
   },
 
@@ -61,6 +62,24 @@ module.exports = {
    */
   editDetailsPage: function(req, res) {
     res.render('project/edit-details');
+  },
+
+  /**
+   * Saves the new project details
+   * @param  {[type]} req [description]
+   * @param  {[type]} res [description]
+   * @return {[type]}     [description]
+   */
+  editDetails: function(req, res) {
+    Project.findByIdAsync(req.body.id).then(function(project) {
+      ['name', 'description'].forEach(function(d) {
+        project[d] = req.body[d];
+      });
+      return project.saveAsync();
+    }).then(function() {
+      req.session.flash = 'Details saved';
+      res.render('project/edit-details');
+    });
   },
 
   /**

@@ -1,0 +1,5 @@
+
+mixin flash()
+  if req.session.flash
+    .alert.alert-info #{req.session.flash}
+    - delete req.session.flash

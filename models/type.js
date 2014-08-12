@@ -35,6 +35,10 @@ var typeSchema = new mongoose.Schema({
 
 var type = mongoose.model('Type', typeSchema);
 
+type.ensureIndex({
+  name: 'text'
+});
+
 bluebird.promisifyAll(type);
 bluebird.promisifyAll(type.prototype);
 

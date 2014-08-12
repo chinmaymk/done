@@ -1,5 +1,6 @@
 include ./mixins/markdown
 include ./mixins/edit-project-nav
+include ./mixins/flash
 
 if !pjax
   include ./partials/yoda
@@ -10,6 +11,7 @@ if !pjax
       content#done-container
         include ./partials/nav
         .container
+          +flash()
           block content
 
     include ./partials/scripts
@@ -18,4 +20,5 @@ else
   content#done-container
     include ./partials/nav
     .container
+      +flash()
       block content

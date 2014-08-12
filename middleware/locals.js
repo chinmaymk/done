@@ -9,7 +9,8 @@ module.exports = function() {
       user: req.user,
       params: req.params,
       pjax: !!req.headers['x-pjax'],
-      marked: marked
+      marked: marked,
+      req: req
     };
     next();
   };
