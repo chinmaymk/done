@@ -1,6 +1,17 @@
 var Project = rr('./models/project');
 var User = rr('./models/user');
 var util = rr('./services/util');
+var Type = rr('./models/type');
+
+function stateBuilder() {
+  var order = 0;
+  return function(name) {
+    return {
+      name: name,
+      order: order++
+    };
+  };
+}
 
 /**
  * Does everything required by a project
@@ -41,15 +52,66 @@ module.exports = {
    */
   create: function(req, res, next) {
     var p = new Project();
-
+    //take only what we need, meant to prevent some issues
     ['name', 'description'].forEach(function(d) {
       p[d] = req.body[d];
     });
 
     p.path = util.url(req.user.login, p.name);
+
+    //add up the member who created this project
     p.members.push(req.user._id);
 
+    //save the project then create corresponding types and states. 
+    //come as default project
     p.saveAsync().then(function() {
+      //feature
+      var feature = new Type({
+        name: 'feature',
+        color: Type.getRandomColor(),
+        project: p._id
+      });
+
+      var fsBuild = stateBuilder();
+      feature.states.push(
+        fsBuild('started'),
+        fsBuild('completed'),
+        fsBuild('reviewed'),
+        fsBuild('verified'),
+        fsBuild('reopened'),
+        fsBuild('closed')
+      );
+
+      //bug
+      var bug = new Type({
+        name: 'bug',
+        color: Type.getRandomColor(),
+        project: p._id
+      });
+
+      var bsBuild = stateBuilder();
+      bug.states.push(
+        bsBuild('started'),
+        bsBuild('completed'),
+        bsBuild('reopened'),
+        bsBuild('closed')
+      );
+
+      //stuff that can not be measure really.
+      var cog = new Type({
+        name: 'cog',
+        color: Type.getRandomColor(),
+        project: p._id
+      });
+
+      var csBuild = stateBuilder();
+      cog.states.push(
+        csBuild('started'),
+        csBuild('finished')
+      );
+
+      return [feature.saveAsync(), bug.saveAsync(), cog.saveAsync()];
+    }).then(function() {
       res.redirect(util.url(req.user.login, p.name, 'edit', 'workflows'));
     }).catch(next);
   },
@@ -89,7 +151,15 @@ module.exports = {
    * @return {[type]}     [description]
    */
   editWorkflowsPage: function(req, res) {
+    var project = res.locals.project;
+    Type.getByProjectIdAsync(project._id).then(function(types) {
+      res.locals.types = types;
+      res.render('project/edit-workflows');
+    });
+  },
 
+  saveType: function(req, res) {
+    req.session.flash = 'Workflows updated';
     res.render('project/edit-workflows');
   },
 
@@ -103,6 +173,13 @@ module.exports = {
     res.render('project/edit-members');
   },
 
+  /**
+   * lists projects for a user
+   * @param  {[type]}   req  [description]
+   * @param  {[type]}   res  [description]
+   * @param  {Function} next [description]
+   * @return {[type]}        [description]
+   */
   listForUser: function(req, res, next) {
     User.findOneAsync({
       login: req.params.username

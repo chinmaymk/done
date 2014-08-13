@@ -101,6 +101,65 @@
     }
   });
 
+  /**
+   * Helps re-ordering states for project workflow
+   * @return {[type]}               [description]
+   */
+  done.views['.state-orderer'] = done.baseView.extend({
+
+    events: {
+      'sortupdate': 'orderChanged'
+    },
+
+    initialize: function() {
+      this.$el.sortable({
+        forcePlaceholderSize: true
+      });
+    },
+
+    orderChanged: function(e, ui) {
+      console.log(e, ui, this.$el.find('div'));
+    }
+
+  });
+
+  /**
+   * helps makeing things editable
+   * @return {[type]}   [description]
+   */
+  done.views['.state-orderer-children'] = done.baseView.extend({
+    events: {
+      'dblclick': 'edit',
+      'blur': 'clear'
+    },
+
+    edit: function() {
+      if (this.$el.attr('contenteditable')) {
+        this.$el.removeAttr('contenteditable');
+      } else {
+        this.$el.attr('contenteditable', true);
+      }
+    },
+
+    clear: function() {
+      this.$el.removeAttr('contenteditable');
+    }
+
+  });
+
+  /**
+   * To prevent idiotic page scroll on # links
+   * @return {[type]}   [description]
+   */
+  done.views['a[href="#"]'] = done.baseView.extend({
+    events: {
+      'click': 'clicked'
+    },
+
+    clicked: function() {
+      return false;
+    }
+  });
 
   $(done.fn.init);
 })();

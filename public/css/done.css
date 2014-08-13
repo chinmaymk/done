@@ -1,3 +1,6 @@
+/*
+ * Hack to support, scrollable dropdowns in bootstrap
+ */
 .dropdown-menu {
   max-height: 500px;
   overflow-y: auto;
@@ -5,6 +8,9 @@
   box-shadow:none;
 }
 
+/**
+ * Some custom settings for navbar logo
+ */
 .navbar-brand {
   font-weight: bold;
   font-size: 30px; 
@@ -14,6 +20,32 @@
   border: 1px dashed silver;
 }
 
+/**
+ * Used for side stacked tabs 
+ */
+.margin-bottom,
 .nav-tabs {
   margin-bottom: 15px;
+}
+
+/**
+ * Used in edit workflows page
+ */
+.circle {
+  border-radius :12px;
+  width: 12px;
+  height: 12px;
+  margin-right:4px;
+  margin-top:4px;
+  display: inline-block;
+  text-align: center;
+}
+
+.state-orderer {
+  margin-left: 15px;
+}
+
+.state-orderer-children {
+  padding: 3px;
+  border-bottom: 1px dashed silver;
 }

@@ -5,5 +5,26 @@ block content
     .col-md-3.hidden-xs
       +editProjectNav(project, 1)
     .col-md-9
-      div Edit workflows here
-        
+      .alert.alert-info.alert-dismissible
+        button.close(type='button', data-dismiss='alert')
+          span(aria-hidden='true') ×
+          span.sr-only Close
+        | Drag re-order states to change the workflow 
+      div.text-right
+        a(href='#')
+          i.glyphicon.glyphicon-plus
+          | Add type
+      each t in types
+        .margin-bottom
+          span.circle(style='background:#{t.color};')
+          span #{t.name}
+          .state-orderer
+            each s in t.states
+              .state-orderer-children(data-order='#{s.order}') #{s.name}
+                small.button-group.btn-group-xs.pull-right
+                  a.btn.text-muted(href='#') Edit
+                  a.btn.text-muted(href='#') Delete
+
+          a(href='#')
+            i.glyphicon.glyphicon-plus
+            | Add state
