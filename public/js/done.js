@@ -13,6 +13,8 @@
     bus: _.extend({}, Backbone.Events)
   };
 
+  $.fn.editable.defaults.mode = 'inline';
+
   var debug = function(args) {
     console.debug(args);
   };
@@ -118,7 +120,7 @@
     },
 
     orderChanged: function(e, ui) {
-      console.log(e, ui, this.$el.find('div'));
+      console.log(this.$el.find('.state-orderer-children').text());
     }
 
   });
@@ -128,21 +130,12 @@
    * @return {[type]}   [description]
    */
   done.views['.state-orderer-children'] = done.baseView.extend({
-    events: {
-      'dblclick': 'edit',
-      'blur': 'clear'
-    },
 
-    edit: function() {
-      if (this.$el.attr('contenteditable')) {
-        this.$el.removeAttr('contenteditable');
-      } else {
-        this.$el.attr('contenteditable', true);
-      }
-    },
-
-    clear: function() {
-      this.$el.removeAttr('contenteditable');
+    initialize: function() {
+      var self = this;
+      self.$el.editable(function() {
+        console.log(arguments);
+      });
     }
 
   });
@@ -156,8 +149,8 @@
       'click': 'clicked'
     },
 
-    clicked: function() {
-      return false;
+    clicked: function(event) {
+      event.preventDefault();
     }
   });
 

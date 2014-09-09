@@ -1,4 +1,4 @@
 MONGODB=mongodb://localhost/done
-CLIENTID= 1e7b4ec76b1eaa4acd42
-CLIENTSERCRET= e4aa485fb28cf99067ad6e015cccd943a21eee3b
-CALLBACKURL= http://localhost:3000/oauth/github/callback
+CLIENTID=1e7b4ec76b1eaa4acd42
+CLIENTSERCRET=e4aa485fb28cf99067ad6e015cccd943a21eee3b
+CALLBACKURL=http://localhost:3000/oauth/github/callback

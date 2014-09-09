@@ -12,19 +12,14 @@ block content
         | Drag re-order states to change the workflow 
       div.text-right
         a(href='#')
-          i.glyphicon.glyphicon-plus
           | Add type
       each t in types
-        .margin-bottom
+        .panel
           span.circle(style='background:#{t.color};')
           span #{t.name}
           .state-orderer
             each s in t.states
               .state-orderer-children(data-order='#{s.order}') #{s.name}
-                small.button-group.btn-group-xs.pull-right
-                  a.btn.text-muted(href='#') Edit
-                  a.btn.text-muted(href='#') Delete
-
+          p
           a(href='#')
-            i.glyphicon.glyphicon-plus
             | Add state

@@ -12,15 +12,14 @@ block content
         p Seems like a good day to start something!
         p Import projects form 
           a(href='/projects/import') GitHub
-    .col-md-9
+    .col-md-9.row
       each val in projects
-        .panel.panel-default
-          .panel-body
+        .thumbnail.col-md-4
+          .caption
             a(href="/#{val.path}/tasks") 
-              h1 #{val.name}
-              a(href="/#{val.path}/edit/details")
-                i.glyphicon.glyphicon-pencil
+              h3 #{val.name}
             div!= marked(val.description || '')
+            a(href="/#{val.path}/edit/details") edit
       if(!projects.length)
         .text-muted.text-center
           p Noop, nothing here.
