@@ -191,6 +191,12 @@ module.exports = {
       res.locals.projects = projects;
       res.render('project/list');
     }).catch(next);
-  }
+  },
 
+  import: function(req, res) {
+    var github = rr('./services/github');
+    github.repo.getReposAsync(function(list) {
+      res.send(list);
+    });
+  }
 };

@@ -41,11 +41,15 @@
   text-align: center;
 }
 
-.state-orderer {
+/*.state-orderer {
   margin-left: 15px;
 }
 
 .state-orderer-children {
-  padding: 3px;
-  border-bottom: 1px dashed silver;
+  padding: 5px;
+  border-bottom: 1px solid silver;
+}*/
+
+.editable-click, a.editable-click, a.editable-click:hover {
+  border-bottom: none;
 }

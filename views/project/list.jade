@@ -5,9 +5,7 @@ block content
     .col-md-3
       .thumbnail.dotted-border
         .caption
-          h3 Create a new project
-          p
-            a.btn.btn-primary(href='/projects/new', role='button') Create
+          a(href='/projects/new') Create a project
       .text-muted
         p Seems like a good day to start something!
         p Import projects form 
@@ -16,10 +14,11 @@ block content
       each val in projects
         .thumbnail.col-md-4
           .caption
-            a(href="/#{val.path}/tasks") 
-              h3 #{val.name}
+            h3 #{val.name}
             div!= marked(val.description || '')
-            a(href="/#{val.path}/edit/details") edit
+            .btn-group-flat
+              a(href="/#{val.path}/edit/details") Edit  
+              a(href="/#{val.path}/tasks") Dashboard
       if(!projects.length)
         .text-muted.text-center
           p Noop, nothing here.

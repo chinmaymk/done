@@ -5,6 +5,13 @@
  * @type {Object}
  */
 (function() {
+
+  $.fn.editable.defaults.mode = 'inline';
+  $.fn.editable.defaults.showbuttons = false;
+  $.fn.editable.defaults.highlight = false;
+  $.fn.editable.defaults.unsavedclass = false;
+  $.fn.editable.defaults.saveonchange = true;
+
   var done = {
     fn: {},
     views: {},
@@ -110,17 +117,36 @@
   done.views['.state-orderer'] = done.baseView.extend({
 
     events: {
-      'sortupdate': 'orderChanged'
+      'sortupdate': 'orderChanged',
+      'click .add-state': 'addState',
+      'click .edit': 'editState'
+    },
+
+    editState: function() {
+
     },
 
     initialize: function() {
       this.$el.sortable({
-        forcePlaceholderSize: true
+        forcePlaceholderSize: true,
+        handle: '.handle',
+        items: '.state-orderer-children'
       });
     },
 
     orderChanged: function(e, ui) {
-      console.log(this.$el.find('.state-orderer-children').text());
+      console.log(this.$el.find('.state-orderer-children').text(), ui);
+    },
+
+    addState: function() {
+      var $li = $('<li class="list-group-item"></li>');
+      var $reorderSpan = $('<span class="handle">&Congruent; </span>');
+      var $stateSpan = $('<span class="editable">New state</span>');
+
+      $li.append($reorderSpan);
+      $li.append($stateSpan);
+
+      this.$el.find('.add-state').before($li);
     }
 
   });
@@ -129,15 +155,10 @@
    * helps makeing things editable
    * @return {[type]}   [description]
    */
-  done.views['.state-orderer-children'] = done.baseView.extend({
-
+  done.views['.editable'] = done.baseView.extend({
     initialize: function() {
-      var self = this;
-      self.$el.editable(function() {
-        console.log(arguments);
-      });
-    }
-
+      this.$el.editable();
+    },
   });
 
   /**
